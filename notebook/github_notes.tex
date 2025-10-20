@@ -1,55 +1,285 @@
-\documentclass[11pt]{article}
+\documentclass[11pt,letterpaper]{article}
 
-% ---------- Packages ----------
+% ============================================
+% PACKAGES
+% ============================================
 \usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{lmodern}
-\usepackage{geometry}
-\geometry{margin=1in}
-\usepackage{parskip}
-\usepackage{enumitem}
-\usepackage{amsmath, amssymb}
+\usepackage[margin=1in]{geometry}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{tcolorbox}
 \usepackage{graphicx}
-\usepackage{hyperref}
-\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue}
+\usepackage{titlesec}
 
-% ---------- Title ----------
-\title{Basic Git and Github - essentials}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.4em}
+
+% ============================================
+% CODE STYLING
+% ============================================
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{codeorange}{RGB}{191, 97, 0}
+\definecolor{yamlkey}{RGB}{0, 0, 255}
+\definecolor{yamlcomment}{RGB}{0, 128, 0}
+
+\lstdefinestyle{codestyle}{
+    backgroundcolor=\color{backcolour},
+    basicstyle=\ttfamily\footnotesize,
+    commentstyle=\color{yamlcomment},
+    keywordstyle=\color{yamlkey},
+    breaklines=true,
+    keepspaces=true,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    numbers=left,
+    numberstyle=\tiny\color{codegray},
+    numbersep=5pt,
+    tabsize=2,
+}
+
+\lstset{style=codestyle}
+\newcommand{\code}[1]{\textcolor{codeorange}{\texttt{#1}}}
+\newtcolorbox{quotebox}{
+    colback=gray!5,
+    colframe=gray!40,
+    boxrule=0.5mm,
+    arc=2mm,
+    left=5mm,
+    right=5mm
+}
+
+% ============================================
+% HEADER / FOOTER
+% ============================================
+\setlength{\headheight}{14pt}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\leftmark}
+\rfoot{\thepage}
+\renewcommand{\sectionmark}[1]{\markboth{\MakeUppercase{#1}}{}}
+
+% ============================================
+% TITLE
+% ============================================
+\title{\textbf{Git and GitHub Essentials Summary}}
 \author{Fhaheem Tadamarry}
-\date{\today}
+\date{}
 
-% ---------- Document ----------
+% ============================================
 \begin{document}
-
 \maketitle
+\tableofcontents
+\newpage
 
-\section{Foundations}
-\subsection{Introduction: Why do we need Git?}
+% ============================================
+\refstepcounter{section}
+\addcontentsline{toc}{section}{\protect\numberline{\thesection}INTRODUCTION TO GIT AND GITHUB}
+\markboth{INTRODUCTION TO GIT AND GITHUB}{}
+
+\subsection{Overview}
+Git is a distributed version control system that tracks file changes locally, while GitHub is a cloud-based platform that hosts Git repositories. Together, they allow developers to version, back up, and collaborate on projects seamlessly.
+
+\subsection{Key Concepts}
 \begin{itemize}
-    \item Git is a state of the art version control system that is used in the vast majority of projects.
-    \item Git: A system that is used to track changes in your files. 
-    \item It allows you to see changes over time, undo and redo changes and make sure that all versions of file is saved so nothing is ever lost.
-    \item Github is an online service that allows you to store your saved files and all their versions.
+    \item \textbf{Git}: Local version control — tracks and manages project changes.
+    \item \textbf{GitHub}: Remote hosting service for Git repositories.
+    \item \textbf{Repository (Repo)}: A folder containing all project files and Git history.
+    \item \textbf{Commit}: A snapshot of your project’s state.
+    \item \textbf{Push / Pull}: Send or retrieve commits between local and remote copies.
 \end{itemize}
 
-\subsection{Git and Github}
-Case: Your boss asks you to remove a page from their website but regrets and asks you to put it back exactly how it was. 
+\begin{quotebox}
+\textit{Git = your local brain, GitHub = your online memory.}
+\end{quotebox}
+
+% ============================================
+\refstepcounter{section}
+\addcontentsline{toc}{section}{\protect\numberline{\thesection}CREATING A LOCAL REPOSITORY}
+\markboth{CREATING A LOCAL REPOSITORY}{}
+
+\subsection{Initialize Git in a Folder}
+To turn a regular folder into a Git repository:
+\begin{lstlisting}[language=bash]
+cd /path/to/project
+git init
+\end{lstlisting}
+
+This creates a hidden \code{.git/} folder which stores the entire version history.
+
+\subsection{Staging and Committing}
+Add files to be tracked and save your first snapshot:
+\begin{lstlisting}[language=bash]
+git add .
+git commit -m "initial commit"
+\end{lstlisting}
+
+Each commit acts as a restore point in your project’s history.
+
+% ============================================
+\refstepcounter{section}
+\addcontentsline{toc}{section}{\protect\numberline{\thesection}CONNECTING TO GITHUB}
+\markboth{CONNECTING TO GITHUB}{}
+
+\subsection{Create and Link Remote Repository}
+\begin{lstlisting}[language=bash]
+git remote add origin https://github.com/fhaheem/EEL-6764.git
+git branch -M main
+git push -u origin main
+\end{lstlisting}
+
+This links your local project to the remote GitHub repository.
+
+\subsection{Checking Connection}
+\begin{lstlisting}[language=bash]
+git remote -v
+\end{lstlisting}
+
+Displays the URLs used for pushing and pulling.
+
+% ============================================
+\refstepcounter{section}
+\addcontentsline{toc}{section}{\protect\numberline{\thesection}DAILY WORKFLOW}
+\markboth{DAILY WORKFLOW}{}
+
+\subsection{Typical Daily Commands}
 \begin{itemize}
-    \item Git maintains a copy of every file in your project at anytime. 
-    \item Every time you modify any file in any way and commit your changes, Git will track it. Both versions are never lost. 
-    \item Revert back to V1, instead of V2.
+    \item Pull the latest version from GitHub:
+    \begin{lstlisting}[language=bash]
+    git pull origin main
+    \end{lstlisting}
+
+    \item Stage and commit your local changes:
+    \begin{lstlisting}[language=bash]
+    git add .
+    git commit -m "update: homework revisions"
+    \end{lstlisting}
+
+    \item Push changes back to GitHub:
+    \begin{lstlisting}[language=bash]
+    git push
+    \end{lstlisting}
 \end{itemize}
 
-\subsection{Create a GitHub Repository}
+\subsection{Selective Add Options}
 \begin{itemize}
-    \item A github repository is a folder where we want to track file changes and file versioning. 
+    \item \code{git add .} → add all new + modified files.
+    \item \code{git add -u} → add only modified/deleted files.
+    \item \code{git add file.tex} → add a specific file.
 \end{itemize}
 
-\subsection*{Key Definitions}
-\begin{description}[leftmargin=2.5cm]
-    \item[Git] A system that is used to track changes in your files.
-    \item[Github] An online service that allows you to store your saved file and all their versions.
-\end{description}
+% ============================================
+\refstepcounter{section}
+\addcontentsline{toc}{section}{\protect\numberline{\thesection}GITIGNORE AND CLEANUP}
+\markboth{GITIGNORE AND CLEANUP}{}
 
+\subsection{Purpose}
+The \code{.gitignore} file tells Git which files to skip, keeping your repository clean.
+
+\subsection{LaTeX Example}
+\begin{lstlisting}[language=bash]
+# macOS
+.DS_Store
+
+# LaTeX build files
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.pdf
+\end{lstlisting}
+
+\subsection{Removing Already-Tracked Junk}
+\begin{lstlisting}[language=bash]
+git rm -r --cached .
+git add .
+git commit -m "cleanup: remove ignored build files"
+git push
+\end{lstlisting}
+
+% ============================================
+\refstepcounter{section}
+\addcontentsline{toc}{section}{\protect\numberline{\thesection}PULLING AND CLONING}
+\markboth{PULLING AND CLONING}{}
+
+\subsection{Cloning a Repo from GitHub}
+To download (clone) a repo onto your computer:
+\begin{lstlisting}[language=bash]
+git clone https://github.com/fhaheem/EEL-6764.git
+cd EEL-6764
+\end{lstlisting}
+
+\subsection{Pulling Updates}
+To update your local copy with the latest online changes:
+\begin{lstlisting}[language=bash]
+git pull origin main
+\end{lstlisting}
+
+If you made local edits first:
+\begin{lstlisting}[language=bash]
+git add .
+git commit -m "save local work"
+git pull origin main
+\end{lstlisting}
+
+% ============================================
+\refstepcounter{section}
+\addcontentsline{toc}{section}{\protect\numberline{\thesection}STOPPING OR DISCONNECTING GIT}
+\markboth{STOPPING OR DISCONNECTING GIT}{}
+
+\subsection{Remove Git Tracking Locally}
+If you want to keep your files but stop tracking:
+\begin{lstlisting}[language=bash]
+rm -rf .git
+\end{lstlisting}
+
+\subsection{Disconnect from GitHub but Keep Git}
+\begin{lstlisting}[language=bash]
+git remote remove origin
+\end{lstlisting}
+
+\subsection{Delete the Entire Folder}
+\begin{lstlisting}[language=bash]
+rm -rf foldername
+\end{lstlisting}
+
+% ============================================
+\refstepcounter{section}
+\addcontentsline{toc}{section}{\protect\numberline{\thesection}SUMMARY AND BEST PRACTICES}
+\markboth{SUMMARY AND BEST PRACTICES}{}
+
+\subsection{Daily Workflow Recap}
+\begin{lstlisting}[language=bash]
+# Start your day
+git pull origin main
+
+# After editing files
+git add .
+git commit -m "updated homework and README"
+
+# Upload to GitHub
+git push
+\end{lstlisting}
+
+\subsection{Key Tips}
+\begin{itemize}
+    \item Always pull before you start editing.
+    \item Write clear commit messages (what + why).
+    \item Use \code{.gitignore} to avoid committing junk.
+    \item Never delete your GitHub repo unless intentional.
+    \item Git only uploads differences — not the full project.
+\end{itemize}
+
+\begin{quotebox}
+Once you master \texttt{git add}, \texttt{git commit}, \texttt{git push}, and \texttt{git pull},\\
+you’ve learned 90\% of daily Git usage.
+\end{quotebox}
 
 \end{document}
