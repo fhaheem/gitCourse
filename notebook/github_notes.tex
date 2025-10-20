@@ -282,4 +282,85 @@ Once you master \texttt{git add}, \texttt{git commit}, \texttt{git push}, and \t
 you’ve learned 90\% of daily Git usage.
 \end{quotebox}
 
+% ============================================
+\refstepcounter{section}
+\addcontentsline{toc}{section}{\protect\numberline{\thesection}BRANCHING WORKFLOW}
+\markboth{BRANCHING WORKFLOW}{}
+% ============================================
+
+\subsection{Why Branches?}
+Branches let you create a safe, parallel line of development away from \code{main}. You can experiment, write HW solutions, or refactor without breaking the stable version. When finished, merge back into \code{main}.
+
+\begin{quotebox}
+Work on \code{main} for reading and releases; create short-lived feature branches for changes.
+\end{quotebox}
+
+\subsection{Create a Branch from \code{main}}
+\begin{lstlisting}[language=bash]
+# Make sure main is up to date
+git checkout main
+git pull origin main
+
+# Create and switch to a new branch (e.g., HW5 work)
+git switch -c hw5-development
+# (older syntax) git checkout -b hw5-development
+\end{lstlisting}
+
+\subsection{Work, Commit, and Push Your Branch}
+\begin{lstlisting}[language=bash]
+# Edit files locally, then save your work
+git add .
+git commit -m "feat(hw5): initial draft of solutions"
+
+# Publish the branch to GitHub (first push sets upstream)
+git push -u origin hw5-development
+\end{lstlisting}
+
+\subsection{Keep Your Branch Fresh}
+\begin{lstlisting}[language=bash]
+# Bring latest main into your branch (rebases your commits on top)
+git checkout hw5-development
+git fetch origin
+git rebase origin/main   # or: git merge origin/main
+\end{lstlisting}
+
+\subsection{Merge Back to \code{main} (CLI)}
+\begin{lstlisting}[language=bash]
+# Switch to main and ensure it's current
+git checkout main
+git pull origin main
+
+# Merge the branch and push the result
+git merge hw5-development
+git push
+\end{lstlisting}
+
+\subsection{Merge Back to \code{main} (GitHub UI)}
+Open a Pull Request (PR) from \code{hw5-development} into \code{main} on GitHub, review the diff, then click \textit{Merge}. This keeps a clean, auditable history.
+
+\subsection{Clean Up (Optional)}
+\begin{lstlisting}[language=bash]
+# Delete the local branch
+git branch -d hw5-development
+
+# Delete the remote branch
+git push origin --delete hw5-development
+\end{lstlisting}
+
+\subsection{Visual Model}
+\begin{lstlisting}
+main:     A --- B --- C -------- D --- E
+                   \ 
+branch:              X --- Y --- Z  (merge -> E)
+\end{lstlisting}
+
+\subsection{Quick Reference}
+\begin{itemize}
+  \item \code{git switch -c <name>} – create and switch to a new branch.
+  \item \code{git push -u origin <name>} – publish branch to GitHub and set upstream.
+  \item \code{git rebase origin/main} – replay your commits on top of latest \code{main}.
+  \item \code{git merge <name>} – merge the named branch into the current branch.
+  \item \code{git branch -d <name>} – delete local branch after merging.
+\end{itemize}
+
 \end{document}
